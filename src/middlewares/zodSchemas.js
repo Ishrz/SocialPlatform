@@ -9,8 +9,13 @@ registrationsSchema = z.object({
     profilepic:z.string()
 })
 
+loginSchema = z.object({
+     email:z.string().email(),
+    password:z.string().min(5,"minimum 5 character needed").max(20)
+})
 
 
 module.exports = {
-    registrationsSchema
+    registrationsSchema,
+    loginSchema
 }

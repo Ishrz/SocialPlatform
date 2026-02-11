@@ -1,4 +1,4 @@
-const {registrationsSchema } = require("../middlewares/zodSchemas.js")
+const {registrationsSchema ,loginSchema} = require("../middlewares/zodSchemas.js")
 const userModel= require("../models/user.model.js")
 
 
@@ -59,11 +59,30 @@ async function registraion(req,res) {
     }
 }
 
+async function login(req,res) {
+    const parseData=loginSchema.safeParse(req.body)
+    if(!parseData.success) return res.json({
+        error : parseData.error.flatten()
+    })
+    req.body=parseData.data
+    
+    const {email,password} = req.body
+
+    const isUserExist= await userModel.findOne({email})
+    if(!isUserExist) return res.json({message:"Invalid user"})
+    
+    if(isUserExist.password !== password) return res.json({
+        message:"Password not match"
+    })
 
 
-
+    res.json({
+        message:"Login Successfull"
+    })
+}
 
 
 module.exports = {
-    registraion
+    registraion,
+    login
 }
