@@ -1,6 +1,7 @@
 const {registrationsSchema ,loginSchema} = require("../middlewares/zodSchemas.js")
 const userModel= require("../models/user.model.js")
-
+const bcrypt= require("bcrypt")
+const jwt=require("jsonwebtoken")
 
 
 async function registraion(req,res) {
@@ -32,10 +33,13 @@ async function registraion(req,res) {
             })
         }
 
+        const hashPass=await bcrypt.hash(password, 5)
+       
+
         const userReg= await userModel.create({
             username,
             email,
-            password,
+            password:hashPass,
             bio,
             profilepic
         })
@@ -71,13 +75,24 @@ async function login(req,res) {
     const isUserExist= await userModel.findOne({email})
     if(!isUserExist) return res.json({message:"Invalid user"})
     
-    if(isUserExist.password !== password) return res.json({
+    const hashPass= await bcrypt.compare(password, isUserExist.password)
+    
+     
+
+    if(!hashPass) return res.json({
         message:"Password not match"
     })
 
 
-    res.json({
-        message:"Login Successfull"
+    const token=jwt.sign({id:isUserExist._id} , process.env.JWT_SECRET ,{ expiresIn:"1h"})
+
+    // console.log(token)
+
+    res.cookie("token",token)
+
+    res.status(201).json({
+        message:"Login Successfull",
+        reg:token
     })
 }
 

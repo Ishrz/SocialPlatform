@@ -1,10 +1,10 @@
 const express = require("express")
 const authRoute = require("./routes/auth.route.js")
-
+const cookieParser = require("cookie-parser")
 const app = express()
 
 app.use(express.json())
-
+app.use(cookieParser())
 
 
 app.use("/v1/api/user" , authRoute)
