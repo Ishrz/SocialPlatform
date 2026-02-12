@@ -43,7 +43,12 @@ async function registraion(req,res) {
             bio,
             profilepic
         })
+
+        const token = jwt.sign({
+            id:userReg._id
+        }, process.env.JWT_SECRET, { expiresIn:"1h"})
         
+        res.cookie("token",token)
 
         res.status(201).json({
             message: "registration successfull",
@@ -92,7 +97,6 @@ async function login(req,res) {
 
     res.status(201).json({
         message:"Login Successfull",
-        reg:token
     })
 }
 
