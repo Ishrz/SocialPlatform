@@ -1,7 +1,8 @@
 const ImageKit = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
 const jwt = require("jsonwebtoken");
-const postModel= require("../models/post.model.js")
+const postModel= require("../models/post.model.js");
+const { Folders } = require("@imagekit/nodejs/resources/index.js");
 
 async function createPost(req, res) {
   const { token } = req.cookies;
@@ -22,6 +23,7 @@ async function createPost(req, res) {
     const response = await client.files.upload({
       file: await toFile(Buffer.from(buffer), "file"),
       fileName: "file-name.jpg",
+      Folder:""
     });
 
     const imgUrl=response.url
