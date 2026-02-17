@@ -23,7 +23,7 @@ async function createPost(req, res) {
     const response = await client.files.upload({
       file: await toFile(Buffer.from(buffer), "file"),
       fileName: "file-name.jpg",
-      Folder:""
+      folder:"instaClone"
     });
 
     const imgUrl=response.url
