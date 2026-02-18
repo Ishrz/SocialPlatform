@@ -5,7 +5,7 @@ const jwt=require("jsonwebtoken")
 
 
 async function registraion(req,res) {
-        console.log("_____registration route hit_____________")
+        console.log("_____registration controller hit_____________")
         const parseBody =await registrationsSchema.safeParse(req.body)
         if(!parseBody.success){
             res.json({

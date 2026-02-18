@@ -1,8 +1,8 @@
 const ImageKit = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
 const jwt = require("jsonwebtoken");
-const postModel= require("../models/post.model.js");
-const { Folders } = require("@imagekit/nodejs/resources/index.js");
+const postModel = require("../models/post.model.js");
+// const { Folders } = require("@imagekit/nodejs/resources/index.js");
 
 async function createPost(req, res) {
   const { token } = req.cookies;
@@ -10,7 +10,6 @@ async function createPost(req, res) {
   const { buffer } = req.file;
 
   try {
-
     const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
     const { id } = verifiedToken;
 
@@ -23,19 +22,19 @@ async function createPost(req, res) {
     const response = await client.files.upload({
       file: await toFile(Buffer.from(buffer), "file"),
       fileName: "file-name.jpg",
-      folder:"instaClone"
+      folder: "instaClone",
     });
 
-    const imgUrl=response.url
-    const Post=await postModel.create({
-        userId:id,
-        imgUrl:imgUrl,
-        caption:caption
-    })
+    const imgUrl = response.url;
+    const Post = await postModel.create({
+      userId: id,
+      imgUrl: imgUrl,
+      caption: caption,
+    });
 
     res.status(201).json({
       message: "post created successfully",
-      data:Post
+      data: Post,
     });
   } catch (err) {
     console.log(`Error at create Post : ${err}`);
@@ -46,4 +45,32 @@ async function createPost(req, res) {
   }
 }
 
-module.exports = createPost;
+//user all posts controller
+async function getAllUserPosts(req, res) {
+  const token = req.cookies.token
+  
+  try{
+    const verifiedToken= jwt.verify(token, process.env.JWT_SECRET)
+
+    const userId = verifiedToken.id
+    
+    const user =await postModel.find({
+      userId:userId
+    })
+
+    console.log(user)
+
+  }catch(err){
+    console.log(`Error aagya :  ${err}`)
+    res.status(403).json({
+      message:"not authorized user"
+    })
+  }
+
+}
+
+
+module.exports = {
+  createPost,
+  getAllUserPosts,
+};
