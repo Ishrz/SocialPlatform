@@ -5,13 +5,13 @@ const postModel = require("../models/post.model.js");
 // const { Folders } = require("@imagekit/nodejs/resources/index.js");
 
 async function createPost(req, res) {
-  const { token } = req.cookies;
+  // const { token } = req.cookies;
   const { caption } = req.body;
   const { buffer } = req.file;
 
   try {
-    const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const { id } = verifiedToken;
+    // const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const { id } = req.user;
 
     //imagekit secret
     const client = new ImageKit({
@@ -47,76 +47,61 @@ async function createPost(req, res) {
 
 //user all posts controller
 async function getAllUserPosts(req, res) {
-  const token = req.cookies.token
-  
-  try{
-    const verifiedToken= jwt.verify(token, process.env.JWT_SECRET)
+  // const token = req.cookies.token;
 
-    const userId = verifiedToken.id
-    
-    const user =await postModel.find({
-      userId:userId
-    })
+  try {
+    // const verifiedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userId =req.user.id;
+
+    const user = await postModel.find({
+      userId: userId,
+    });
 
     res.status(200).json({
-      message:"user post fetch successfully",
-      posts:user
-    })
-
-  }catch(err){
-    console.log(`Error aagya :  ${err}`)
+      message: "user post fetch successfully",
+      posts: user,
+    });
+  } catch (err) {
+    console.log(`Error aagya :  ${err}`);
     res.status(403).json({
-      message:"not authorized user"
-    })
+      message: "not authorized user",
+    });
   }
-
 }
 
-async function getUserPosts(req,res){
+async function getUserPosts(req, res) {
+  const { postId } = req.params;
+  const tokenUserId= req.user.id 
+  
+  try {
+    const post = await postModel.findById(postId);
+    const isValidUser = post.userId.equals(tokenUserId);
+    // console.log(isValidUser)
+    if (!isValidUser) {
+      return res.status(403).json({
+        message: "Access Forbidden",
+      });
+    }
 
-  const token =req.cookies.token
+    res.status(200).json({
+    message: "post details fetched successfully",
+    potsDetails: post,
+  });
 
-  if(!token){
+
+
+  } catch (err) {
     return res.status(401).json({
-      message
-:"Unauthrized access token no provided"    })
+      message: "something went wrong",
+    });
   }
 
-  const {postId} = req.params
- 
-  let verifiedToken;
-  try{
-     verifiedToken = jwt.verify(token,process.env.JWT_SECRET)
-
-    // const userId
-    const post = await postModel.findById(postId)
-    console.log(verifiedToken)
-  }catch(err){
-    return res.status(401).json({
-      message:"Unauthrized access"
-    })
-  }
-
-  // console.log(post.userId)
-
-  const isValidUser = post.userId.equals(verifiedToken.id)
-  // console.log(isValidUser)
-  if(!isValidUser){
-    return res.status(403).json({
-      message:"Access Forbidden"
-    })
-  }
-
-  res.status(200).json({
-    message:"post details fetched successfully",
-    potsDetails:post
-  })
-
-
+  
 }
 
 module.exports = {
   createPost,
   getAllUserPosts,
-  getUserPosts
+  getUserPosts,
 };
