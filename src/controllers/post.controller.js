@@ -79,27 +79,28 @@ async function getUserPosts(req,res){
   if(!token){
     return res.status(401).json({
       message
-:"Unauthrized access"    })
+:"Unauthrized access token no provided"    })
   }
 
   const {postId} = req.params
  
+  let verifiedToken;
   try{
-    const verifiedToken = jwt.verify(token,process.env.JWT_SECRET)
+     verifiedToken = jwt.verify(token,process.env.JWT_SECRET)
 
     // const userId
-
+    const post = await postModel.findById(postId)
+    console.log(verifiedToken)
   }catch(err){
     return res.status(401).json({
       message:"Unauthrized access"
     })
   }
 
-  const post = await postModel.findById(postId)
-  console.log(post.userId)
+  // console.log(post.userId)
 
-  const isValidUser = post.userId.equals(postId)
-  console.log(isValidUser)
+  const isValidUser = post.userId.equals(verifiedToken.id)
+  // console.log(isValidUser)
   if(!isValidUser){
     return res.status(403).json({
       message:"Access Forbidden"
