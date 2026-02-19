@@ -58,7 +58,10 @@ async function getAllUserPosts(req, res) {
       userId:userId
     })
 
-    console.log(user)
+    res.status(200).json({
+      message:"user post fetch successfully",
+      posts:user
+    })
 
   }catch(err){
     console.log(`Error aagya :  ${err}`)
@@ -69,8 +72,50 @@ async function getAllUserPosts(req, res) {
 
 }
 
+async function getUserPosts(req,res){
+
+  const token =req.cookies.token
+
+  if(!token){
+    return res.status(401).json({
+      message
+:"Unauthrized access"    })
+  }
+
+  const {postId} = req.params
+ 
+  try{
+    const verifiedToken = jwt.verify(token,process.env.JWT_SECRET)
+
+    // const userId
+
+  }catch(err){
+    return res.status(401).json({
+      message:"Unauthrized access"
+    })
+  }
+
+  const post = await postModel.findById(postId)
+  console.log(post.userId)
+
+  const isValidUser = post.userId.equals(postId)
+  console.log(isValidUser)
+  if(!isValidUser){
+    return res.status(403).json({
+      message:"Access Forbidden"
+    })
+  }
+
+  res.status(200).json({
+    message:"post details fetched successfully",
+    potsDetails:post
+  })
+
+
+}
 
 module.exports = {
   createPost,
   getAllUserPosts,
+  getUserPosts
 };
