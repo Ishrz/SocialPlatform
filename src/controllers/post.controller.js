@@ -1,8 +1,9 @@
 const ImageKit = require("@imagekit/nodejs");
 const { toFile } = require("@imagekit/nodejs");
 const jwt = require("jsonwebtoken");
+
 const postModel = require("../models/post.model.js");
-// const { Folders } = require("@imagekit/nodejs/resources/index.js");
+const likeModel = require("../models/likes.model.js")
 
 async function createPost(req, res) {
   // const { token } = req.cookies;
@@ -100,8 +101,36 @@ async function getUserPosts(req, res) {
   
 }
 
+
+async function likedPost(req ,res) {
+    const {username} = req.user
+    const postId = req.params.postId
+
+    const isPostExist = await postModel.findById(postId)
+    // console.log(isPostExist)
+
+    if(!isPostExist) return res.status(404).json({
+      message: "Post Not Found"
+    })
+
+    const likedPost = await likeModel.create({
+      postId:postId,
+      user:username
+    })
+
+    res.status(201).json({
+      message:"Post Liked Successfully",
+      post:likedPost
+    })
+
+ 
+
+
+}
+
 module.exports = {
   createPost,
   getAllUserPosts,
   getUserPosts,
+  likedPost
 };

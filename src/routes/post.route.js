@@ -7,7 +7,7 @@ const tokenVerification = require("../middlewares/auth.middleware.js")
 
 //controllers
 const {createPost} = require("../controllers/post.controller.js")
-const{ getAllUserPosts, getUserPosts} = require("../controllers/post.controller.js")
+const{ getAllUserPosts, getUserPosts , likedPost} = require("../controllers/post.controller.js")
 
 const postRouter= express.Router()
 
@@ -21,6 +21,6 @@ postRouter.get('/details/:postId' , logger , tokenVerification, getUserPosts)
 
 //post likes
 //POST v1/api/post/likes/:postId
-postRouter.post("/likes/:postId" , logger , tokenVerification , likePostController)
+postRouter.post("/likes/:postId" , logger , tokenVerification , likedPost)
 
 module.exports = postRouter
