@@ -45,7 +45,8 @@ async function registraion(req,res) {
         })
 
         const token = jwt.sign({
-            id:userReg._id
+            id:userReg._id,
+            username: userReg.username
         }, process.env.JWT_SECRET, { expiresIn:"1h"})
         
         res.cookie("token",token)
@@ -89,7 +90,7 @@ async function login(req,res) {
     })
 
 
-    const token=jwt.sign({id:isUserExist._id} , process.env.JWT_SECRET ,{ expiresIn:"1h"})
+    const token=jwt.sign({id:isUserExist._id , username: isUserExist.username} , process.env.JWT_SECRET ,{ expiresIn:"1h"})
 
     // console.log(token)
 

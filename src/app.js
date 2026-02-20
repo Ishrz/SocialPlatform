@@ -16,7 +16,7 @@ app.use(cookieParser())
 //routers
 app.use("/v1/api/user" , authRoute)
 app.use("/v1/api/post" , postRouter)
-app.use("v1/api/users" , userRouter)
+app.use("/v1/api/users" , userRouter)
 
 
 

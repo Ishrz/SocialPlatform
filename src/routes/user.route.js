@@ -1,16 +1,16 @@
-const express = require("express")
+const express = require("express");
 
-const tokenVerification  = require("../middlewares/auth.middleware.js")
+const tokenVerification = require("../middlewares/auth.middleware.js");
+const logger = require("../middlewares/logger.middleware.js");
+const followUserController = require("../controllers/followUser.controller.js");
 
-const followUserController = require("../controllers/followUser.controller.js")
+const userRouter = express.Router();
 
-const userRouter = express.Router()
+userRouter.post(
+  "/follow/:username",
+  logger,
+  tokenVerification,
+  followUserController
+);
 
-
-userRouter.post("/follow/:username" , followUserController)
-
-
-
-
-
-module.exports = userRouter
+module.exports = userRouter;
