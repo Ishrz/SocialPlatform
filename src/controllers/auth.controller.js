@@ -104,7 +104,7 @@ async function login(req,res) {
 async function getMe(req, res){
     const {id }=req.user
     try{
-        const user = await userModel.findById({id}, -password)
+        const user = await userModel.findById(id).select("-password")
         console.log(user)
 
         res.status(200).json({
@@ -113,7 +113,10 @@ async function getMe(req, res){
         })
 
     }catch(err){
-        // res.json()
+        console.log(err.message)
+        res.status(404).json({
+            message:"User not found"
+        })
     }
     
 }
