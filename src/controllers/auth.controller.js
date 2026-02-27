@@ -101,8 +101,26 @@ async function login(req,res) {
     })
 }
 
+async function getMe(req, res){
+    const {id }=req.user
+    try{
+        const user = await userModel.findById({id}, -password)
+        console.log(user)
+
+        res.status(200).json({
+            message:"user fetch successfuly",
+            data:user
+        })
+
+    }catch(err){
+        // res.json()
+    }
+    
+}
+
 
 module.exports = {
     registraion,
-    login
+    login,
+    getMe
 }
