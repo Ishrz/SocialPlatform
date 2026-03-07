@@ -8,12 +8,14 @@ async function registraion(req,res) {
         console.log("_____registration controller hit_____________")
         const parseBody =await registrationsSchema.safeParse(req.body)
         if(!parseBody.success){
-            res.json({
+            return res.json({
                 error:parseBody.error.message
             })
         }
 
+
         req.body=parseBody.data
+ 
         const {username,password,email,bio,profilepic} = req.body
 
         
