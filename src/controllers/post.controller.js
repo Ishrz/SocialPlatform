@@ -128,9 +128,20 @@ async function likedPost(req ,res) {
 
 }
 
+async function getFeedPosts(req,res){
+
+  const posts= await postModel.find()
+
+  res.status(200).json({
+    message:"post fetch successfully",
+    posts
+  })
+}
+
 module.exports = {
   createPost,
   getAllUserPosts,
   getUserPosts,
-  likedPost
+  likedPost,
+  getFeedPosts
 };
