@@ -130,7 +130,7 @@ async function likedPost(req ,res) {
 
 async function getFeedPosts(req,res){
 
-  const posts= await postModel.find()
+  const posts= await postModel.find().populate("userId")
 
   res.status(200).json({
     message:"post fetch successfully",

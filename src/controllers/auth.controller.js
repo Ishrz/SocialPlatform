@@ -80,7 +80,7 @@ async function login(req,res) {
     
     const {email,password} = req.body
 
-    const isUserExist= await userModel.findOne({email})
+    const isUserExist= await userModel.findOne({email}).select("+password")
     if(!isUserExist) return res.json({message:"Invalid user"})
     
     const hashPass= await bcrypt.compare(password, isUserExist.password)
