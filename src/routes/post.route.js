@@ -11,19 +11,13 @@ const {
   getAllUserPosts,
   getUserPosts,
   likedPost,
-  getFeedPosts
+  getFeedPosts,
 } = require("../controllers/post.controller.js");
 
 const postRouter = express.Router();
 
 //creating post
-postRouter.post(
-  "/",
-  logger,
-  upload.single("imgUrl"),
-  tokenVerification,
-  createPost
-);
+postRouter.post("/",logger, upload.single("imgUrl"), tokenVerification, createPost );
 //getting all posts
 postRouter.get("/", logger, tokenVerification, getAllUserPosts);
 //getting specific user posts
@@ -37,8 +31,6 @@ postRouter.post("/likes/:postId", logger, tokenVerification, likedPost);
 // @route Get /v1/api.posts/feed
 //  @des get all psots from db
 // @access Private
-postRouter.get("/feed", tokenVerification , getFeedPosts)
-
-
+postRouter.get("/feed", tokenVerification, getFeedPosts);
 
 module.exports = postRouter;
