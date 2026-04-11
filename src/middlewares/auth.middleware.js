@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 
 const tokenVerification = (req,res,next) => {
   const token = req.cookies.token;
-
+  console.log(req.cookies.token)
   if (!token) {
     return res.status(401).json({
       message: "Unauthrized access token no provided",
