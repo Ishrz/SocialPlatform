@@ -19,7 +19,7 @@ const postRouter = express.Router();
 //creating post
 postRouter.post("/",logger, upload.single("imgUrl"), tokenVerification, createPost );
 //getting all posts
-postRouter.get("/", logger, tokenVerification, getAllUserPosts);
+postRouter.get("/",  logger, tokenVerification, getAllUserPosts);
 //getting specific user posts
 postRouter.get("/details/:postId", logger, tokenVerification, getUserPosts);
 

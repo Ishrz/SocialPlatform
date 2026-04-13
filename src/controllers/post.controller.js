@@ -130,7 +130,7 @@ async function likedPost(req ,res) {
 
 async function getFeedPosts(req,res){
 
-  console.log(req.user)
+  // console.log(req.user)
 
   const posts=  await Promise.all ( (await postModel.find().populate("userId").lean())
               .map(  async (post)=>{
