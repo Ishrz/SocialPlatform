@@ -11,6 +11,7 @@ const {
   getAllUserPosts,
   getUserPosts,
   likedPost,
+  unLikePost,
   getFeedPosts,
 } = require("../controllers/post.controller.js");
 
@@ -26,6 +27,8 @@ postRouter.get("/details/:postId", logger, tokenVerification, getUserPosts);
 //post likes
 //POST v1/api/post/likes/:postId
 postRouter.post("/likes/:postId", logger, tokenVerification, likedPost);
+
+postRouter.post("/unLike/:postId" , logger , tokenVerification ,unLikePost )
 
 //all feed routes
 // @route Get /v1/api.posts/feed

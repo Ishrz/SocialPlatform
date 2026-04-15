@@ -122,8 +122,31 @@ async function likedPost(req ,res) {
       message:"Post Liked Successfully",
       post:likedPost
     })
+}
 
- 
+
+async function unLikePost(req,res) {
+  const id =req.params.postId
+  const { username } = req.user
+
+  const isLiked = await likeModel.findOne({
+    postId: id,
+    user :username
+  })
+
+  if(!isLiked){
+    return res.status(400).json({
+      message:"post not liked"
+    })
+  }
+
+  await likeModel.findByIdAndDelete({_id : isLiked._id})
+
+  res.status(200).json({
+    message : "Post unLike succesfully"
+  })
+
+
 
 
 }
@@ -157,5 +180,6 @@ module.exports = {
   getAllUserPosts,
   getUserPosts,
   likedPost,
+  unLikePost,
   getFeedPosts
 };
